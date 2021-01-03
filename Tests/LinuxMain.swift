@@ -1,7 +1,7 @@
 import XCTest
 
-import mmpages_iosTests
+import MMPagesTests
 
 var tests = [XCTestCaseEntry]()
-tests += mmpages_iosTests.allTests()
+tests += MMPagesTests.allTests()
 XCTMain(tests)

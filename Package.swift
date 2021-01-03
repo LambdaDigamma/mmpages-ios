@@ -4,25 +4,25 @@
 import PackageDescription
 
 let package = Package(
-    name: "mmpages-ios",
+    name: "MMPages",
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "mmpages-ios",
-            targets: ["mmpages-ios"]),
+            name: "MMPages",
+            targets: ["MMPages"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "MMCommon", url: "https://github.com/lambdadigamma/mmcommon-ios", .branch("master")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "mmpages-ios",
+            name: "MMPages",
             dependencies: []),
         .testTarget(
-            name: "mmpages-iosTests",
-            dependencies: ["mmpages-ios"]),
+            name: "MMPagesTests",
+            dependencies: ["MMPages"]),
     ]
 )
