@@ -32,7 +32,7 @@ public struct PageView: View {
                     .multilineTextAlignment(.leading)
                     .font(Typography.style(.body))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.secondaryLabel)
+                    .foregroundColor(.secondary)
                     .padding(.horizontal, Margin.wide)
                     .padding(.bottom)
             }

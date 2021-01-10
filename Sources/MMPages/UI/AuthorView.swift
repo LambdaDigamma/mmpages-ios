@@ -25,7 +25,7 @@ public struct AuthorView: View {
                 Text("vor einer Stunde")
                     .font(Typography.style(.custom(size: 10, weight: .regular)))
                     .multilineTextAlignment(.leading)
-                    .foregroundColor(.secondaryLabel)
+                    .foregroundColor(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
