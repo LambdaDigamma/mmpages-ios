@@ -9,8 +9,48 @@
 
 import UIKit
 import MMCommon
+import ModernNetworking
+import Combine
+import SwiftUI
 
 public class PageViewController: UIViewController {
+    
+    @Published var page: UIResource<Page> = .loading
+    
+    var pageViewModel: PageViewModel
+    
+    private var pageService: PageService? = nil
+    private var pageID: Page.ID? = nil
+    
+    private var blocks: [PageBlock] = []
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    public var config: PageDisplayConfiguration = .init() {
+        didSet {
+            setupBarButtonItems()
+        }
+    }
+    
+    // MARK: - Init
+    
+    public init(pageID: Page.ID, pageService: PageService? = nil) {
+        
+        self.pageViewModel = PageViewModel(pageService: pageService, pageID: pageID)
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        self.pageID = pageID
+        self.pageService = pageService
+        
+        print("Page ID: \(pageID)")
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - UIViewController Lifecycle
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,35 +60,91 @@ public class PageViewController: UIViewController {
         
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        pageViewModel.loadPage()
+        
+    }
+    
+    // MARK: - UI
+    
     private func setupUI() {
         
-        self.addSubSwiftUIView(PageView(), to: view)
+//        PageView(blocks: blocks)
+        
+        let pageView = PageView(viewModel: pageViewModel)
+        
+        self.addSubSwiftUIView(pageView, to: view)
         
     }
     
     private func setupBarButtonItems() {
         
-        let shareButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "square.and.arrow.up"),
-            style: .plain,
-            target: self,
-            action: #selector(showSharesheet)
-        )
+        var rightBarButtonsItems: [UIBarButtonItem] = []
+        
+        if config.showShare {
+            rightBarButtonsItems.append(UIBarButtonItem(
+                image: UIImage(systemName: "square.and.arrow.up"),
+                style: .plain,
+                target: self,
+                action: #selector(showSharesheet)
+            ))
+        }
         
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItems = [
-            shareButtonItem
-        ]
+        navigationItem.rightBarButtonItems = rightBarButtonsItems
         
     }
     
+    // MARK: - Data Handling
+    
+    private func loadPage() {
+        
+        if let pageService = pageService, let pageID = pageID {
+            
+            let pageLoading = pageService.loadPage(for: pageID)
+            
+            pageLoading.sink { (completion: Subscribers.Completion<Error>) in
+                
+                switch completion {
+                    case .failure(let error):
+                        print(error)
+                    case .finished:
+                        break
+                }
+                
+            } receiveValue: { (page: Page) in
+                
+                print(page)
+                self.page = .success(page)
+                
+            }.store(in: &cancellables)
+
+        }
+        
+    }
+    
+    // MARK: - Actions
+    
     @objc private func showSharesheet() {
         
-        // TODO: Change URL here
-        
-        let items = [URL(string: "https://www.apple.com")!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        present(ac, animated: true)
+        switch pageViewModel.page {
+            case .success(let page):
+                
+                // TODO: Change URL here
+                if let slug = page.slug,
+                   let url = URL(string: "https://moers-festival.de/\(slug)") {
+                    
+                    let items = [url]
+                    let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                    present(ac, animated: true)
+                    
+                }
+                
+            default:
+                break
+        }
         
     }
     

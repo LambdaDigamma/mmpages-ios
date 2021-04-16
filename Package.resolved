@@ -2,11 +2,29 @@
   "object": {
     "pins": [
       {
+        "package": "Cache",
+        "repositoryURL": "https://github.com/hyperoslo/Cache",
+        "state": {
+          "branch": null,
+          "revision": "c7f4d633049c3bd649a353bad36f6c17e9df085f",
+          "version": "6.0.0"
+        }
+      },
+      {
         "package": "MMCommon",
         "repositoryURL": "https://github.com/lambdadigamma/mmcommon-ios",
         "state": {
           "branch": "master",
-          "revision": "d111ff77e0fd5c0955cbeabd51ff01bcace7bf9b",
+          "revision": "80ff6bdb91f3573797e35d2f092e51028f5d0aa3",
+          "version": null
+        }
+      },
+      {
+        "package": "ModernNetworking",
+        "repositoryURL": "https://github.com/lambdadigamma/modernnetworking",
+        "state": {
+          "branch": "main",
+          "revision": "a82bcbd2d384cd4d5bbbf6d3b616c184120106a7",
           "version": null
         }
       }
