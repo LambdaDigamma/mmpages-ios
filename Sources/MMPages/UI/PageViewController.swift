@@ -132,9 +132,21 @@ public class PageViewController: UIViewController {
         switch pageViewModel.page {
             case .success(let page):
                 
-                // TODO: Change URL here
-                if let slug = page.slug,
-                   let url = URL(string: "https://moers-festival.de/\(slug)") {
+                if var slug = page.slug,
+                   let environment = pageService?.environment {
+                    
+                    var urlComponents = URLComponents()
+                    
+                    urlComponents.scheme = environment.scheme
+                    urlComponents.host = environment.host
+                    
+                    if !slug.hasPrefix("/") {
+                        slug = "/" + slug
+                    }
+                    
+                    urlComponents.path = slug
+                    
+                    guard let url = urlComponents.url else { return }
                     
                     let items = [url]
                     let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)

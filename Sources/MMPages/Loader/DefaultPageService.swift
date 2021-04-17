@@ -12,10 +12,13 @@ import Cache
 
 public class DefaultPageService: PageService {
     
+    public var environment: ServerEnvironment
+    
     private let loader: HTTPLoader
     private let cache: Storage<String, Page>
     
-    public init(_ loader: HTTPLoader = URLSessionLoader(), _ cache: Storage<String, Page>) {
+    public init(_ environment: ServerEnvironment, _ loader: HTTPLoader = URLSessionLoader(), _ cache: Storage<String, Page>) {
+        self.environment = environment
         self.loader = loader
         self.cache = cache
     }
