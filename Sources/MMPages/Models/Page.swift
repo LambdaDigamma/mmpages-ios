@@ -52,6 +52,7 @@ public struct Page: BasePage {
         let decoder = JSONDecoder()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
         
         decoder.dateDecodingStrategy = .formatted(formatter)
         decoder.keyDecodingStrategy = .useDefaultKeys

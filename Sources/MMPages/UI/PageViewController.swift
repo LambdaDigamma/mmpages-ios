@@ -26,6 +26,8 @@ public class PageViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
+    public var likeBarButtonItem: UIBarButtonItem?
+    
     public var config: PageDisplayConfiguration = .init() {
         didSet {
             setupBarButtonItems()
@@ -71,8 +73,6 @@ public class PageViewController: UIViewController {
     
     private func setupUI() {
         
-//        PageView(blocks: blocks)
-        
         let pageView = PageView(viewModel: pageViewModel)
         
         self.addSubSwiftUIView(pageView, to: view)
@@ -90,6 +90,19 @@ public class PageViewController: UIViewController {
                 target: self,
                 action: #selector(showSharesheet)
             ))
+        }
+        
+        if let likeStateCallback = config.likeState, config.showLike {
+            
+            likeBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: likeStateCallback() ? "heart.fill" : "heart"),
+                style: .plain,
+                target: self,
+                action: #selector(toggleLike)
+            )
+            
+            rightBarButtonsItems.append(likeBarButtonItem!)
+            
         }
         
         navigationItem.largeTitleDisplayMode = .never
@@ -116,7 +129,6 @@ public class PageViewController: UIViewController {
                 
             } receiveValue: { (page: Page) in
                 
-                print(page)
                 self.page = .success(page)
                 
             }.store(in: &cancellables)
@@ -156,6 +168,22 @@ public class PageViewController: UIViewController {
                 
             default:
                 break
+        }
+        
+    }
+    
+    @objc private func toggleLike() {
+        
+        if let toggleLike = config.toggleLike {
+            
+            let isLiked = toggleLike()
+            
+            if isLiked {
+                likeBarButtonItem?.image = UIImage(systemName: "heart.fill")
+            } else {
+                likeBarButtonItem?.image = UIImage(systemName: "heart")
+            }
+            
         }
         
     }
