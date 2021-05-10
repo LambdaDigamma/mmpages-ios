@@ -6,6 +6,9 @@
 //
 
 import Foundation
+
+#if canImport(WebKit)
+
 import WebKit
 import SwiftUI
 
@@ -170,3 +173,5 @@ extension WebViewWrapper.Coordinator: WKNavigationDelegate {
     }
     
 }
+
+#endif

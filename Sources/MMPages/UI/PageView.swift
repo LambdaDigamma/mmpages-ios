@@ -5,6 +5,8 @@
 //  Created by Lennart Fischer on 02.01.21.
 //
 
+#if canImport(WebKit)
+
 import SwiftUI
 import MMCommon
 import ModernNetworking
@@ -109,3 +111,5 @@ struct PageView_Previews: PreviewProvider {
         
     }
 }
+
+#endif

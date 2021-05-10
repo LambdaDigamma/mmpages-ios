@@ -73,9 +73,13 @@ public class PageViewController: UIViewController {
     
     private func setupUI() {
         
+        #if canImport(WebKit)
+        
         let pageView = PageView(viewModel: pageViewModel)
         
         self.addSubSwiftUIView(pageView, to: view)
+        
+        #endif
         
     }
     
@@ -105,7 +109,9 @@ public class PageViewController: UIViewController {
             
         }
         
+        #if !os(tvOS)
         navigationItem.largeTitleDisplayMode = .never
+        #endif
         navigationItem.rightBarButtonItems = rightBarButtonsItems
         
     }
@@ -141,6 +147,8 @@ public class PageViewController: UIViewController {
     
     @objc private func showSharesheet() {
         
+        #if !os(tvOS)
+        
         switch pageViewModel.page {
             case .success(let page):
                 
@@ -169,6 +177,8 @@ public class PageViewController: UIViewController {
             default:
                 break
         }
+        
+        #endif
         
     }
     
