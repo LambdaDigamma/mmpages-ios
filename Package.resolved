@@ -14,18 +14,18 @@
         "package": "MMCommon",
         "repositoryURL": "https://github.com/lambdadigamma/mmcommon-ios",
         "state": {
-          "branch": "master",
-          "revision": "80ff6bdb91f3573797e35d2f092e51028f5d0aa3",
-          "version": null
+          "branch": null,
+          "revision": "d1ab76ad0316dcf58a23196f69ec07e2f8ba6702",
+          "version": "0.0.1"
         }
       },
       {
         "package": "ModernNetworking",
         "repositoryURL": "https://github.com/lambdadigamma/modernnetworking",
         "state": {
-          "branch": "main",
-          "revision": "a82bcbd2d384cd4d5bbbf6d3b616c184120106a7",
-          "version": null
+          "branch": null,
+          "revision": "758c3f92475ca504b78ff6ac15d616be7f6a2aa5",
+          "version": "0.1.1"
         }
       }
     ]
