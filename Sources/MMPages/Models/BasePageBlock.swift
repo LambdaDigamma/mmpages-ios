@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MMCommon
 import ModernNetworking
 
-public protocol BasePageBlock: Model, Stubbable, Equatable {
+public protocol BasePageBlock: Model, Stubbable {
     
     associatedtype ID = Identifiable
     associatedtype PageID = Identifiable

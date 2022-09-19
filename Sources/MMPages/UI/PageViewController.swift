@@ -7,8 +7,8 @@
 
 #if canImport(UIKit)
 
+import Core
 import UIKit
-import MMCommon
 import ModernNetworking
 import Combine
 import SwiftUI

@@ -12,15 +12,29 @@ import Foundation
 import WebKit
 import SwiftUI
 
-class WebViewStateModel: ObservableObject {
+public class WebViewStateModel: ObservableObject {
+    
     @Published var pageTitle: String = "Web View"
     @Published var loading: Bool = false
     @Published var canGoBack: Bool = false
     @Published var goBack: Bool = false
+    
+    public init(
+        pageTitle: String = "Web View",
+        loading: Bool = false,
+        canGoBack: Bool = false,
+        goBack: Bool = false
+    ) {
+        self.pageTitle = pageTitle
+        self.loading = loading
+        self.canGoBack = canGoBack
+        self.goBack = goBack
+    }
+    
 }
 
-struct WebView: View {
-    enum NavigationAction {
+public struct WebView: View {
+    public enum NavigationAction {
         case decidePolicy(WKNavigationAction, (WKNavigationActionPolicy) -> Void)
         case didRecieveAuthChallange(URLAuthenticationChallenge, (URLSession.AuthChallengeDisposition, URLCredential?) -> Void)
         case didStartProvisionalNavigation(WKNavigation)
@@ -36,29 +50,41 @@ struct WebView: View {
     private var actionDelegate: ((_ navigationAction: WebView.NavigationAction) -> Void)?
     
     
-    let uRLRequest: URLRequest
+    public let uRLRequest: URLRequest
     
     
-    var body: some View {
+    public var body: some View {
         
-        WebViewWrapper(webViewStateModel: webViewStateModel,
-                       action: actionDelegate,
-                       request: uRLRequest)
+        WebViewWrapper(
+            webViewStateModel: webViewStateModel,
+            action: actionDelegate,
+            request: uRLRequest
+        )
     }
     
     /*
      if passed onNavigationAction it is mendetory to complete URLAuthenticationChallenge and decidePolicyFor callbacks
      */
-    init(uRLRequest: URLRequest, webViewStateModel: WebViewStateModel, onNavigationAction: ((_ navigationAction: WebView.NavigationAction) -> Void)?) {
+    public init(
+        uRLRequest: URLRequest,
+        webViewStateModel: WebViewStateModel,
+        onNavigationAction: ((_ navigationAction: WebView.NavigationAction) -> Void)?
+    ) {
         self.uRLRequest = uRLRequest
         self.webViewStateModel = webViewStateModel
         self.actionDelegate = onNavigationAction
     }
     
-    init(url: URL, webViewStateModel: WebViewStateModel, onNavigationAction: ((_ navigationAction: WebView.NavigationAction) -> Void)? = nil) {
-        self.init(uRLRequest: URLRequest(url: url),
-                  webViewStateModel: webViewStateModel,
-                  onNavigationAction: onNavigationAction)
+    public init(
+        url: URL,
+        webViewStateModel: WebViewStateModel,
+        onNavigationAction: ((_ navigationAction: WebView.NavigationAction) -> Void)? = nil
+    ) {
+        self.init(
+            uRLRequest: URLRequest(url: url),
+            webViewStateModel: webViewStateModel,
+            onNavigationAction: onNavigationAction
+        )
     }
 }
 
@@ -66,13 +92,14 @@ struct WebView: View {
  A weird case: if you change WebViewWrapper to struct cahnge in WebViewStateModel will never call updateUIView
  */
 
-final class WebViewWrapper : UIViewRepresentable {
+public final class WebViewWrapper : UIViewRepresentable {
+    
     @ObservedObject var webViewStateModel: WebViewStateModel
     let action: ((_ navigationAction: WebView.NavigationAction) -> Void)?
     
     let request: URLRequest
     
-    init(webViewStateModel: WebViewStateModel,
+    public init(webViewStateModel: WebViewStateModel,
          action: ((_ navigationAction: WebView.NavigationAction) -> Void)?,
          request: URLRequest) {
         self.action = action
@@ -81,7 +108,7 @@ final class WebViewWrapper : UIViewRepresentable {
     }
     
     
-    func makeUIView(context: Context) -> WKWebView  {
+    public func makeUIView(context: Context) -> WKWebView  {
         let view = WKWebView()
         view.backgroundColor = .black
         view.isOpaque = false
@@ -90,18 +117,18 @@ final class WebViewWrapper : UIViewRepresentable {
         return view
     }
     
-    func updateUIView(_ uiView: WKWebView, context: Context) {
+    public func updateUIView(_ uiView: WKWebView, context: Context) {
         if uiView.canGoBack, webViewStateModel.goBack {
             uiView.goBack()
             webViewStateModel.goBack = false
         }
     }
     
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         return Coordinator(action: action, webViewStateModel: webViewStateModel)
     }
     
-    final class Coordinator: NSObject {
+    public final class Coordinator: NSObject {
         
         @ObservedObject var webViewStateModel: WebViewStateModel
         
@@ -118,7 +145,7 @@ final class WebViewWrapper : UIViewRepresentable {
 
 extension WebViewWrapper.Coordinator: WKNavigationDelegate {
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         if action == nil {
             decisionHandler(.allow)
@@ -127,27 +154,27 @@ extension WebViewWrapper.Coordinator: WKNavigationDelegate {
         }
     }
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         webViewStateModel.loading = true
         action?(.didStartProvisionalNavigation(navigation))
     }
     
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         action?(.didReceiveServerRedirectForProvisionalNavigation(navigation))
         
     }
     
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         webViewStateModel.loading = false
         webViewStateModel.canGoBack = webView.canGoBack
         action?(.didFailProvisionalNavigation(navigation, error))
     }
     
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         action?(.didCommit(navigation))
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         webViewStateModel.loading = false
         webViewStateModel.canGoBack = webView.canGoBack
         if let title = webView.title {
@@ -156,13 +183,13 @@ extension WebViewWrapper.Coordinator: WKNavigationDelegate {
         action?(.didFinish(navigation))
     }
     
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         webViewStateModel.loading = false
         webViewStateModel.canGoBack = webView.canGoBack
         action?(.didFail(navigation, error))
     }
     
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         
         if action == nil  {
             completionHandler(.performDefaultHandling, nil)

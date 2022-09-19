@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MMCommon
 import ModernNetworking
 
-public protocol BasePage: Model, Timestamps, Stubbable, Equatable {
+public protocol BasePage: Model, Stubbable {
     
     associatedtype ID = Identifiable
     associatedtype UserID = Identifiable
@@ -21,6 +20,8 @@ public protocol BasePage: Model, Timestamps, Stubbable, Equatable {
     var blocks: [PageBlock] { get set }
     var creatorID: UserID? { get set }
     var extras: [String: String]? { get set }
+    var createdAt: Date? { get set }
+    var updatedAt: Date? { get set }
     var archivedAt: Date? { get set }
     
 }

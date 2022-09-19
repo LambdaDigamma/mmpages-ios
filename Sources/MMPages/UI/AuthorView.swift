@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MMCommon
 
 public struct AuthorView: View {
     
@@ -19,11 +18,11 @@ public struct AuthorView: View {
                 .frame(width: 40, height: 40, alignment: .center)
             VStack(alignment: .leading) {
                 Text("Tim Isfort")
-                    .font(Typography.style(.custom(size: 14, weight: .medium)))
+                    .font(.callout)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.primary)
                 Text("vor einer Stunde")
-                    .font(Typography.style(.custom(size: 10, weight: .regular)))
+                    .font(.callout)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.secondary)
             }
