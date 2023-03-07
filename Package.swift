@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "MMPages",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .watchOS(.v7),
         .tvOS(.v14),
         .macOS(.v11)
