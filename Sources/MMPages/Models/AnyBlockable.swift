@@ -19,9 +19,9 @@ public enum BlockType: String, CaseIterable, Codable, CaseIterableDefaultsLast {
     
     case unknown = "unknown"
     
-    public var metatype: Blockable.Type {
+    public var metatype: any Blockable.Type {
         switch self {
-            case .text: return BlockText.self
+            case .text: return TextBlock.self
             case .youtubeVideo: return BlockYouTubeVideo.self
             case .linkList: return BlockLinkList.self
             case .imageCollection: return BlockImageCollection.self
@@ -39,9 +39,9 @@ public protocol Blockable: Codable {
 
 public class AnyBlockable: Codable {
     
-    public var base: Blockable
+    public var base: any Blockable
     
-    public init(_ base: Blockable) {
+    public init(_ base: any Blockable) {
         self.base = base
     }
     

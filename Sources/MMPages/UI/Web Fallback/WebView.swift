@@ -89,10 +89,10 @@ public struct WebView: View {
 }
 
 /*
- A weird case: if you change WebViewWrapper to struct cahnge in WebViewStateModel will never call updateUIView
+ A weird case: if you change WebViewWrapper to struct change in WebViewStateModel will never call updateUIView
  */
 
-public final class WebViewWrapper : UIViewRepresentable {
+public struct WebViewWrapper : UIViewRepresentable {
     
     @ObservedObject var webViewStateModel: WebViewStateModel
     let action: ((_ navigationAction: WebView.NavigationAction) -> Void)?

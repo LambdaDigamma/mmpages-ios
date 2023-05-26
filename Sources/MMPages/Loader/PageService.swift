@@ -11,8 +11,8 @@ import ModernNetworking
 
 public protocol PageService {
     
-    var environment: ServerEnvironment { get set }
-    
     func loadPage(for pageID: Page.ID) -> AnyPublisher<Page, Error>
+    
+    func show(for pageID: Page.ID, cacheMode: CacheMode) async throws -> Resource<Page>
     
 }

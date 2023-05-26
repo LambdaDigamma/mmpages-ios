@@ -1,14 +1,14 @@
 //
-//  BlockText.swift
+//  TextBlock.swift
 //  
 //
-//  Created by Lennart Fischer on 23.05.22.
+//  Created by Lennart Fischer on 04.04.23.
 //
 
 import Foundation
 import ProseMirror
 
-public struct BlockText: Blockable {
+public struct TextBlock: Blockable {
     
     public static var type: BlockType = .text
     

@@ -8,24 +8,18 @@
 import Foundation
 import Combine
 import ModernNetworking
-import Cache
 
 public class DefaultPageService: PageService {
     
-    public var environment: ServerEnvironment
-    
     private let loader: HTTPLoader
-    private let cache: Storage<String, Page>
     
-    public init(_ environment: ServerEnvironment, _ loader: HTTPLoader = URLSessionLoader(), _ cache: Storage<String, Page>) {
-        self.environment = environment
+    public init(_ loader: HTTPLoader = URLSessionLoader()) {
         self.loader = loader
-        self.cache = cache
     }
     
     public func loadPage(for pageID: Page.ID) -> AnyPublisher<Page, Error> {
         
-        let request = HTTPRequest(path: Endpoint.show(pageID: pageID).path())
+        let request = Self.showRequest(pageID: pageID)
         
         return Deferred {
             Future { promise in
@@ -38,11 +32,28 @@ public class DefaultPageService: PageService {
         .compactMap { $0.body }
         .decode(type: Resource<Page>.self, decoder: Page.decoder)
         .map({
-//            self.cache.async.setObject($0, forKey: "events") { (result) in }
             return $0.data
         })
         .eraseToAnyPublisher()
         
+    }
+    
+    public func show(for pageID: Page.ID, cacheMode: CacheMode = .cached) async throws -> Resource<Page> {
+        
+        var request = Self.showRequest(pageID: pageID)
+        
+        request.cachePolicy = cacheMode.policy
+        
+        let result = await loader.load(request)
+        
+        let posts = try await result.decoding(Resource<Page>.self)
+        
+        return posts
+        
+    }
+    
+    internal static func showRequest(pageID: Page.ID) -> HTTPRequest {
+        HTTPRequest(path: Endpoint.show(pageID: pageID).path())
     }
     
 }

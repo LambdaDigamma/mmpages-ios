@@ -18,6 +18,7 @@ public class PageViewController: UIViewController {
     @Published var page: UIResource<Page> = .loading
     
     var pageViewModel: PageViewModel
+    var nativePageViewModel: NativePageViewModel
     
     private var pageService: PageService? = nil
     private var pageID: Page.ID? = nil
@@ -34,11 +35,14 @@ public class PageViewController: UIViewController {
         }
     }
     
+    var actionTransmitter = ActionTransmitter()
+    
     // MARK: - Init
     
     public init(pageID: Page.ID, pageService: PageService? = nil) {
         
         self.pageViewModel = PageViewModel(pageService: pageService, pageID: pageID)
+        self.nativePageViewModel = NativePageViewModel(pageID: pageID)
         
         super.init(nibName: nil, bundle: nil)
         
@@ -73,13 +77,26 @@ public class PageViewController: UIViewController {
     
     private func setupUI() {
         
-        #if canImport(WebKit)
-        
-        let pageView = PageView(viewModel: pageViewModel)
-        
-        self.addSubSwiftUIView(pageView, to: view)
-        
-        #endif
+        if pageID != nil {
+            
+            let pageView = NativePageView(
+                viewModel: nativePageViewModel,
+                actionTransmitter: actionTransmitter
+            )
+            
+            self.addSubSwiftUIView(pageView, to: view)
+            
+        } else {
+            
+#if canImport(WebKit)
+            
+            let pageView = PageView(viewModel: pageViewModel)
+            
+            self.addSubSwiftUIView(pageView, to: view)
+            
+#endif
+            
+        }
         
     }
     
@@ -150,29 +167,33 @@ public class PageViewController: UIViewController {
         #if !os(tvOS)
         
         switch pageViewModel.page {
-            case .success(let page):
+            case .success(_):
                 
-                if var slug = page.slug,
-                   let environment = pageService?.environment {
-                    
-                    var urlComponents = URLComponents()
-                    
-                    urlComponents.scheme = environment.scheme
-                    urlComponents.host = environment.host
-                    
-                    if !slug.hasPrefix("/") {
-                        slug = "/" + slug
-                    }
-                    
-                    urlComponents.path = slug
-                    
-                    guard let url = urlComponents.url else { return }
-                    
-                    let items = [url]
-                    let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-                    present(ac, animated: true)
-                    
-                }
+                // todo: fix this
+                
+                break
+                
+//                if var slug = page.slug,
+//                   let environment = pageService?.environment {
+//
+//                    var urlComponents = URLComponents()
+//
+//                    urlComponents.scheme = environment.scheme
+//                    urlComponents.host = environment.host
+//
+//                    if !slug.hasPrefix("/") {
+//                        slug = "/" + slug
+//                    }
+//
+//                    urlComponents.path = slug
+//
+//                    guard let url = urlComponents.url else { return }
+//
+//                    let items = [url]
+//                    let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+//                    present(ac, animated: true)
+//
+//                }
                 
             default:
                 break
