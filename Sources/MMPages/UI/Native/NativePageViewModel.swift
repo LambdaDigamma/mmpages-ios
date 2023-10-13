@@ -69,4 +69,10 @@ public class NativePageViewModel: ObservableObject {
         
     }
     
+    public func cancel() {
+        
+        self.cancellables.forEach { $0.cancel() }
+        
+    }
+    
 }

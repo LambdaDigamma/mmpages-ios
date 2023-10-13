@@ -53,6 +53,9 @@ public struct NativePageView: View {
         .task {
             viewModel.reload()
         }
+        .onDisappear {
+            viewModel.cancel()
+        }
         
     }
     
