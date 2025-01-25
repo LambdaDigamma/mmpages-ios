@@ -17,11 +17,11 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Core", path: "./../Core"),
-        .package(name: "ModernNetworking", url: "https://github.com/lambdadigamma/modernnetworking", from: "0.1.1"),
+        .package(name: "ModernNetworking", url: "https://github.com/LambdaDigamma/ModernNetworking", from: "1.0.0"),
         .package(name: "ProseMirror", url: "https://github.com/lambdadigamma/swift-prosemirror", .upToNextMajor(from: "0.0.1")),
-        .package(name: "MediaLibraryKit", url: "https://github.com/LambdaDigamma/MediaLibraryKit", .upToNextMajor(from: "0.0.3")),
-        .package(url: "https://github.com/SvenTiigi/YouTubePlayerKit.git", from: "1.1.1"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", .upToNextMajor(from: "6.10.0")),
+        .package(name: "MediaLibraryKit", url: "https://github.com/LambdaDigamma/MediaLibraryKit", .upToNextMajor(from: "0.0.9")),
+        .package(url: "https://github.com/SvenTiigi/YouTubePlayerKit", from: "1.1.1"),
+        .package(name: "GRDB", url: "https://github.com/groue/GRDB.swift", branch: "master"),
         .package(url: "https://github.com/hmlongco/Factory", .upToNextMajor(from: "2.0.0"))
     ],
     targets: [
@@ -33,7 +33,7 @@ let package = Package(
                 "ProseMirror",
                 "MediaLibraryKit",
                 "YouTubePlayerKit",
-                .product(name: "GRDB", package: "GRDB.swift"),
+                .product(name: "GRDB", package: "GRDB"),
                 .product(name: "Factory", package: "Factory")
             ]
         ),

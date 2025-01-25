@@ -80,7 +80,8 @@ public struct Page: BasePage {
         self.slug = try container.decode(String?.self, forKey: .slug)
         self.summary = try container.decode(String?.self, forKey: .summary)
         self.pageTemplateID = try container.decode(Int?.self, forKey: .pageTemplateID)
-        self.blocks = try container.decodeIfPresent([PageBlock].self, forKey: .blocks) ?? []
+        self.blocks = (try container.decodeIfPresent([PageBlock].self, forKey: .blocks) ?? [])
+            .sorted(by: { $0.order < $1.order })
         self.creatorID = try container.decodeIfPresent(UserID.self, forKey: .creatorID)
         self.resourceUrl = try container.decodeIfPresent(String.self, forKey: .resourceUrl)
         self.extras = try container.decode([String: String]?.self, forKey: .extras)

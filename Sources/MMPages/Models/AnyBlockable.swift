@@ -22,9 +22,9 @@ public enum BlockType: String, CaseIterable, Codable, CaseIterableDefaultsLast {
     public var metatype: any Blockable.Type {
         switch self {
             case .text: return TextBlock.self
+            case .imageCollection: return BlockImageCollection.self
             case .youtubeVideo: return BlockYouTubeVideo.self
             case .linkList: return BlockLinkList.self
-            case .imageCollection: return BlockImageCollection.self
             default: return UnknownBlock.self
         }
     }

@@ -24,8 +24,8 @@ public struct PageBlockView: View {
         switch pageBlock.blockType {
             case .text:
                 BlockTextWithMediaView(block: pageBlock)
-//                TextBlockView(block: pageBlock, frame: containerFrame)
-                
+            case .imageCollection:
+                ImageCollectionView(block: pageBlock)
 //            case .hero:
 //                HeroBlockView(block: pageBlock, frame: containerFrame)
 //            case .detailText:

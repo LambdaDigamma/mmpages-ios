@@ -9,7 +9,7 @@ import Foundation
 
 #if canImport(WebKit)
 
-import WebKit
+@preconcurrency import WebKit
 import SwiftUI
 
 public class WebViewStateModel: ObservableObject {

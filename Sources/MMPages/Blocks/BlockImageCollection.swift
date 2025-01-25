@@ -10,7 +10,7 @@ import ProseMirror
 
 public struct BlockImageCollection: Blockable {
     
-    public static var type: BlockType = .text
+    public static var type: BlockType = .imageCollection
     
     public var text: Document?
     

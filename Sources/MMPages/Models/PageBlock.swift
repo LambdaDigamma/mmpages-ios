@@ -18,6 +18,7 @@ public struct PageBlock: BasePageBlock {
     public var data: AnyBlockable
     public var children: [PageBlock] = []
     public var mediaCollectionsContainer: MediaCollectionsContainer?
+    public var order: Int
     public var createdAt: Date?
     public var updatedAt: Date?
     
@@ -29,6 +30,7 @@ public struct PageBlock: BasePageBlock {
         blockType: BlockType,
         data: AnyBlockable,
         children: [PageBlock] = [],
+        order: Int = 0,
         mediaCollectionsContainer: MediaCollectionsContainer? = nil,
         createdAt: Date? = Date(),
         updatedAt: Date? = Date()
@@ -39,6 +41,7 @@ public struct PageBlock: BasePageBlock {
         self.blockType = blockType
         self.data = data
         self.children = children
+        self.order = order
         self.mediaCollectionsContainer = mediaCollectionsContainer
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -51,6 +54,7 @@ public struct PageBlock: BasePageBlock {
         self.id = try container.decode(ID.self, forKey: .id)
         self.pageID = try container.decode(Page.ID?.self, forKey: .pageID)
         self.type = try container.decode(String.self, forKey: .type)
+        self.order = try container.decodeIfPresent(Int.self, forKey: .order) ?? 0
         self.createdAt = try container.decode(Date?.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date?.self, forKey: .updatedAt)
         self.children = try container.decodeIfPresent([PageBlock].self, forKey: .children) ?? []
@@ -95,6 +99,7 @@ public struct PageBlock: BasePageBlock {
         case pageID = "page_id"
         case type = "type"
         case data = "data"
+        case order = "order"
         case children = "children"
         case mediaCollectionsContainer = "media_collections"
         case createdAt = "created_at"
